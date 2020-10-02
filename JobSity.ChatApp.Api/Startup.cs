@@ -27,8 +27,18 @@ namespace JobSity.ChatApp.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddSignalRCore();
+            services.AddSignalR();
             services.AddSingleton<ChatHubService>();
+
+            var allowedCorsDomains = Configuration.GetSection("AllowedCorsDomains").Value?.Split(",");
+
+            services.AddCors(options => {
+                options.AddDefaultPolicy(builder => {
+                    builder.WithOrigins(allowedCorsDomains)
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -42,6 +52,12 @@ namespace JobSity.ChatApp.Api
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            var allowedCorsDomains = Configuration.GetSection("AllowedCorsDomains").Value?.Split(",");
+
+            app.UseCors(
+                options => options.SetIsOriginAllowed(x => _ = true).AllowAnyMethod().AllowAnyHeader().AllowCredentials()
+            );
 
             app.UseAuthorization();
 
