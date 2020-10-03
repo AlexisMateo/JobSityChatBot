@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using JobSity.ChatApp.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace JobSity.ChatApp.IdentityServer
 {
@@ -27,12 +28,12 @@ namespace JobSity.ChatApp.IdentityServer
         {
             var identityDbConnectionString = _configuration.GetSection("ConnectionStrings:IdentityDb").Value;
 
-            services.AddDbContext<IdentityDbContext>(options => {
+            services.AddDbContext<IdentityChatDbContext>(options => {
                 options.UseSqlServer(identityDbConnectionString);
             });
 
-            services.AddIdentity<Identityuser, IdentityRole>()
-                .AddEntityFrameworkStores<IdentityDbContext>()
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<IdentityChatDbContext>()
                 .AddDefaultTokenProviders();
 
             services.AddControllersWithViews();
