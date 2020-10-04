@@ -25,8 +25,32 @@ namespace JobSity.ChatApp.WebApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var chatWebIdentityInfo = Configuration.GetSection("ChatWebIdentityInfo");
+
+            services.AddAuthentication(config =>{
+                config.DefaultScheme = "Cookies";
+                config.DefaultChallengeScheme = "oidc";
+
+            })
+            .AddCookie("Cookies")
+            .AddOpenIdConnect("oidc", config =>{
+                config.SignInScheme = "Cookies";
+
+                config.Authority = chatWebIdentityInfo.GetSection("Authority").Value;
+                config.RequireHttpsMetadata = false;
+
+                config.ClientId = chatWebIdentityInfo.GetSection("ClientId").Value;
+                config.ClientSecret = chatWebIdentityInfo.GetSection("ClientSecret").Value;
+                
+                config.SaveTokens = true;
+
+                config.ResponseType = "code";
+                
+            }) ;
+
             services.AddHttpClient();
             services.AddHttpClient<IIdentityManagerService, IdentityManagerService>();
+
             services.AddRazorPages();
         }
 
@@ -48,6 +72,8 @@ namespace JobSity.ChatApp.WebApp
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

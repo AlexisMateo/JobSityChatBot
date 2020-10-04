@@ -26,17 +26,32 @@ namespace JobSity.ChatApp.IdentityServer
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            // var identityDbConnectionString = _configuration.GetSection("ConnectionStrings:IdentityDb").Value;
+            var identityDbConnectionString = _configuration.GetSection("ConnectionStrings:IdentityDb").Value;
 
-            // services.AddDbContext<IdentityChatDbContext>(options => {
-            //     options.UseSqlServer(identityDbConnectionString);
-            // });
+            services.AddDbContext<IdentityChatDbContext>(options => {
+                options.UseSqlServer(identityDbConnectionString);
+            });
 
-            // services.AddIdentity<IdentityUser, IdentityRole>()
-            //     .AddEntityFrameworkStores<IdentityChatDbContext>()
-            //     .AddDefaultTokenProviders();
+            services.AddIdentity<IdentityUser, IdentityRole>(config =>{
+                config.Password.RequiredLength = 4;
+                // keep it simple for dev purpose
+                config.Password.RequireDigit = false;
+                config.Password.RequireNonAlphanumeric = false;
+                config.Password.RequireNonAlphanumeric = false;
+            })
+            .AddEntityFrameworkStores<IdentityChatDbContext>()
+            .AddDefaultTokenProviders();
+
+            services.ConfigureApplicationCookie(config => {
+                config.Cookie.Name = "ChatIdentityCookie";
+                config.LoginPath = "/Authentication/Login";
+            });
+
+            
 
             services.AddIdentityServer()
+                .AddAspNetIdentity<IdentityUser>()
+                .AddInMemoryIdentityResources(Configuration.GetIdentityResources())
                 .AddInMemoryApiResources(Configuration.GetApisResources())
                 .AddInMemoryApiScopes(Configuration.GetApiScopes())
                 .AddInMemoryClients(Configuration.GetClients())

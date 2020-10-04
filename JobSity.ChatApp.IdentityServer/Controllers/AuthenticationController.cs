@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
+using JobSity.ChatApp.IdentityServer.ViewModels;
 
 namespace JobSity.ChatApp.IdentityServer.Controllers
 {
@@ -21,36 +22,55 @@ namespace JobSity.ChatApp.IdentityServer.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Login(string userName, string password)
+        [HttpGet]
+        public IActionResult Login(string returnUrl)
         {
-            var user = await _userManager.FindByNameAsync(userName);
+            return View(new LoginViewModel { ReturnUrl = returnUrl });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginViewModel loginViewModel)
+        {
+            var user = await _userManager.FindByNameAsync(loginViewModel.UserName);
 
             if(user != null)
             {
-                var result = await _signInManager.PasswordSignInAsync(user, password, false, false);
+                var result = await _signInManager.PasswordSignInAsync(user, loginViewModel.Password, false, false);
 
                 if(result.Succeeded)
                 {
-                    return Redirect("Index");
+                    return Redirect(loginViewModel.ReturnUrl);
                 }
             }
 
             return View();
         }
 
-        public async Task<IActionResult> Register(string userName, string password)
+        [HttpGet]
+        public IActionResult Register(string returnUrl)
         {
+            return View(new LoginViewModel { ReturnUrl = returnUrl });
+        }
+
+        public async Task<IActionResult> Register(RegisterViewModel registerViewModel)
+        {
+            if(!ModelState.IsValid)
+            {
+                return View(registerViewModel);
+            }
+
             var user = new IdentityUser
             {
-                UserName = userName,
-                Email = string.Empty
+                UserName = registerViewModel.UserName
             };
 
-            var result = await _userManager.CreateAsync(user, password);
+            var result = await _userManager.CreateAsync(user, registerViewModel.Password);
 
             if(result.Succeeded)
             {
+                await _signInManager.SignInAsync(user, false);
 
+                return Redirect(registerViewModel.ReturnUrl);
             }
 
             return View();
