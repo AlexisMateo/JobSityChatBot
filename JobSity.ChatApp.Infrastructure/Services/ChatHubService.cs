@@ -28,6 +28,8 @@ namespace JobSity.ChatApp.Infrastructure.Services
         public async override Task OnConnectedAsync()
         {
             await SendTheLastedMessageToTheUser();
+
+            await base.OnConnectedAsync();
         }
 
         private async Task AddMessageToStorage(string user, string message)
@@ -55,7 +57,7 @@ namespace JobSity.ChatApp.Infrastructure.Services
                 foreach(var message in messages)
                 {
 
-                        await Clients.User(Context.ConnectionId).SendAsync(
+                        await Clients.Client(Context.ConnectionId).SendAsync(
                             "ReceiveMessage", message.UserName, message.MessageText
                         );
 
