@@ -1,6 +1,6 @@
 "use strict";
 
-var connection = new signalR.HubConnectionBuilder().withUrl("https://localhost:5001/chatHub").build();
+var connection = new signalR.HubConnectionBuilder().withUrl("http://localhost:5001/chatHub").build();
 
 connection.on("ReceiveMessage", function(user, message){
 

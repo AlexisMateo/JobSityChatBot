@@ -26,15 +26,21 @@ namespace JobSity.ChatApp.IdentityServer
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            var identityDbConnectionString = _configuration.GetSection("ConnectionStrings:IdentityDb").Value;
+            // var identityDbConnectionString = _configuration.GetSection("ConnectionStrings:IdentityDb").Value;
 
-            services.AddDbContext<IdentityChatDbContext>(options => {
-                options.UseSqlServer(identityDbConnectionString);
-            });
+            // services.AddDbContext<IdentityChatDbContext>(options => {
+            //     options.UseSqlServer(identityDbConnectionString);
+            // });
 
-            services.AddIdentity<IdentityUser, IdentityRole>()
-                .AddEntityFrameworkStores<IdentityChatDbContext>()
-                .AddDefaultTokenProviders();
+            // services.AddIdentity<IdentityUser, IdentityRole>()
+            //     .AddEntityFrameworkStores<IdentityChatDbContext>()
+            //     .AddDefaultTokenProviders();
+
+            services.AddIdentityServer()
+                .AddInMemoryApiResources(Configuration.GetApisResources())
+                .AddInMemoryApiScopes(Configuration.GetApiScopes())
+                .AddInMemoryClients(Configuration.GetClients())
+                .AddDeveloperSigningCredential();
 
             services.AddControllersWithViews();
         }
@@ -49,12 +55,16 @@ namespace JobSity.ChatApp.IdentityServer
 
             app.UseRouting();
 
-            app.UseAuthentication();
+            //app.UseAuthentication();
 
-            app.UseAuthorization();
+            //app.UseAuthorization();
+
+            app.UseIdentityServer();
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapDefaultControllerRoute();
+
                 endpoints.MapGet("/", async context =>
                 {
                     await context.Response.WriteAsync("Hello World!");
