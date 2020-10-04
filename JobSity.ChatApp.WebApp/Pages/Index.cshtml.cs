@@ -38,7 +38,7 @@ namespace JobSity.ChatApp.WebApp.Pages
 
         }
 
-        public async Task<IActionResult> OnGetTokenAsync()
+        public async Task<IActionResult> OnGetRetrieveChatApiUrlAsync()
         {
             var identityInfo = _configuration.GetSection("IdentityInfo");
             var chatApiUrl = _configuration.GetSection("ChatpApiUrl").Value;
@@ -53,7 +53,7 @@ namespace JobSity.ChatApp.WebApp.Pages
 
             var accessToken = await _identityManagerService.GetAccessToken(basicTokenRequest);
             
-            return new JsonResult(accessToken);
+            return new JsonResult($"{chatApiUrl}?token={accessToken}");
         }
     }
 }

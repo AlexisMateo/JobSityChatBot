@@ -2,11 +2,11 @@
 
 function getAccessTockenAndConnectToSignalR()
 {
-    fetch(`${document.location.origin}/?handler=Token`).then(function(response) {
+    fetch(`${document.location.origin}/?handler=RetrieveChatApiUrl`).then(function(response) {
         if(response.ok) {
-          response.json().then(function(token) {
+          response.json().then(function(apiUrl) {
             
-            connectToSignalR(token);
+            connectToSignalR(apiUrl);
 
           });
         } else {
@@ -18,9 +18,9 @@ function getAccessTockenAndConnectToSignalR()
       });
 }
 
-function connectToSignalR(token)
+function connectToSignalR(apiUrl)
 {
-    var connection = new signalR.HubConnectionBuilder().withUrl(`https://localhost:5001/chatHub?token=${token}`).build();
+    var connection = new signalR.HubConnectionBuilder().withUrl(apiUrl).build();
 
     connection.on("ReceiveMessage", function(user, message){
 
