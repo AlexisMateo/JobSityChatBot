@@ -49,9 +49,10 @@ namespace JobSity.ChatApp.IdentityServer.Controllers
         [HttpGet]
         public IActionResult Register(string returnUrl)
         {
-            return View(new LoginViewModel { ReturnUrl = returnUrl });
+            return View(new RegisterViewModel { ReturnUrl = returnUrl });
         }
 
+        [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel registerViewModel)
         {
             if(!ModelState.IsValid)
@@ -73,7 +74,7 @@ namespace JobSity.ChatApp.IdentityServer.Controllers
                 return Redirect(registerViewModel.ReturnUrl);
             }
 
-            return View();
+            return View(registerViewModel);
         }
 
     }

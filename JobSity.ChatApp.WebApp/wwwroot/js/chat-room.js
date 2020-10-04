@@ -20,7 +20,7 @@ function getAccessTockenAndConnectToSignalR()
 
 function connectToSignalR(token)
 {
-    var connection = new signalR.HubConnectionBuilder().withUrl(`http://localhost:5001/chatHub?token=${token}`).build();
+    var connection = new signalR.HubConnectionBuilder().withUrl(`https://localhost:5001/chatHub?token=${token}`).build();
 
     connection.on("ReceiveMessage", function(user, message){
 

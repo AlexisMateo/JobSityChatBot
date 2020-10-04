@@ -9,5 +9,10 @@ namespace JobSity.ChatApp.Infrastructure.Repositories
         {
 
         }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder options)
+        {
+            
+        }
     }
 }
