@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using JobSity.ChatApp.Infrastructure.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -26,6 +27,35 @@ namespace JobSity.ChatApp.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var authority = Configuration.GetSection("IdentityInfo:Authority").Value;
+            var audience = Configuration.GetSection("IdentityInfo:Audience").Value;
+
+            services.AddAuthentication("Bearer")
+                .AddJwtBearer("Bearer", configuration => {
+                    configuration.Authority = authority;
+                    configuration.Audience = audience;
+                    configuration.RequireHttpsMetadata = false;
+
+                    configuration.Events = new JwtBearerEvents
+                    {
+                        OnMessageReceived = context => {
+                            
+                            var accessToken = context.Request.Query["token"];
+
+                            var path = context.HttpContext.Request.Path;
+
+                            if(!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/chatHub"))
+                            {
+                                context.Token = accessToken;
+                            }
+
+                            return Task.CompletedTask;
+
+                        }
+                    }; 
+
+                });
+
             services.AddControllers();
             services.AddSignalR();
             services.AddSingleton<ChatHubService>();
@@ -59,6 +89,7 @@ namespace JobSity.ChatApp.Api
                 options => options.SetIsOriginAllowed(x => _ = true).AllowAnyMethod().AllowAnyHeader().AllowCredentials()
             );
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
