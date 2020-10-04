@@ -2,6 +2,7 @@ using JobSity.ChatApp.Core.Entities.Chat;
 using JobSity.ChatApp.Core.Interfaces.Chat;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
 
@@ -10,23 +11,18 @@ namespace JobSity.ChatApp.Infrastructure.Services
     [Authorize]
     public class ChatHubService : Hub
     {
-        private readonly IChatRoomService _chatRoomService;
-
-        public ChatHubService(IChatRoomService chatRoomService)
+         private IServiceProvider _serviceProvider;
+        public ChatHubService(IServiceProvider serviceProvider)
         {
-            _chatRoomService = chatRoomService;
+            _serviceProvider = serviceProvider;
         }
 
         public async Task SendMessage(string user, string message)
         {
             await Clients.All.SendAsync("ReceiveMessage", user, message);
 
-            await _chatRoomService.AddChatRoomMessage(
-                new Message {
-                    UserName = user,
-                    MessageText = message,
-                    SentDate = DateTime.Now,
-                });
+            await AddMessageToStorage(user, message);
+           
         }
 
         public async override Task OnConnectedAsync()
@@ -34,17 +30,36 @@ namespace JobSity.ChatApp.Infrastructure.Services
             await SendTheLastedMessageToTheUser();
         }
 
+        private async Task AddMessageToStorage(string user, string message)
+        {
+            using (var scope = _serviceProvider.CreateScope())
+            {
+                var chatRoomService = scope.ServiceProvider.GetRequiredService<IChatRoomService>();
+                
+                await chatRoomService.AddChatRoomMessage(
+                    new Message {
+                        UserName = user,
+                        MessageText = message,
+                        SentDate = DateTime.Now,
+                });
+            }
+        }
+
         private async Task SendTheLastedMessageToTheUser()
         {
-            var messages = await _chatRoomService.GetChatRoomMessages(50);
-
-            foreach(var message in messages)
+             using (var scope = _serviceProvider.CreateScope())
             {
+                var chatRoomService = scope.ServiceProvider.GetRequiredService<IChatRoomService>();
+                var messages = await chatRoomService.GetChatRoomMessages(50);
 
-                    await Clients.User(Context.ConnectionId).SendAsync(
-                        "ReceiveMessage", message.UserName, message.MessageText
-                    );
+                foreach(var message in messages)
+                {
 
+                        await Clients.User(Context.ConnectionId).SendAsync(
+                            "ReceiveMessage", message.UserName, message.MessageText
+                        );
+
+                }
             }
         }
 
