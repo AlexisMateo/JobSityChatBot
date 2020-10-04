@@ -2,12 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using JobSity.ChatApp.Core.Interfaces.Chat;
+using JobSity.ChatApp.Core.Interfaces.Repositories;
+using JobSity.ChatApp.Core.Services;
+using JobSity.ChatApp.Infrastructure.Repositories;
 using JobSity.ChatApp.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -69,6 +74,15 @@ namespace JobSity.ChatApp.Api
                         .AllowAnyMethod();
                 });
             });
+
+            var dBConnectionString = Configuration.GetSection("ConnectionStrings:FinancialChatDb").Value;
+
+            services.AddDbContext<FinancialChatDbContext>(options => {
+                options.UseSqlServer(dBConnectionString);
+            });
+
+            services.AddTransient(typeof(IRepository<>), typeof(FinancialChatBaseRepository<>));
+            services.AddTransient<IChatRoomService, ChatRoomService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

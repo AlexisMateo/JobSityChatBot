@@ -10,7 +10,7 @@ namespace JobSity.ChatApp.Infrastructure.Repositories
 {
     public class BaseRepository<T, TContext> : IRepository<T> 
         where T : class
-        where TContext : DbContext, new()
+        where TContext : DbContext
     {
         private readonly TContext _dbContext;
         private readonly DbSet<T> _dbSet;
@@ -25,7 +25,7 @@ namespace JobSity.ChatApp.Infrastructure.Repositories
             return await _dbSet.FindAsync(id);
         }
 
-        public async Task<IEnumerable<T>> Get(Expression<Func<T, bool>> filter = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, string includeProperties = "")
+        public async Task<IEnumerable<T>> Get(Expression<Func<T, bool>> filter = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, string includeProperties = "", int limit = 0)
         {
             IQueryable<T> query = _dbSet;
 
@@ -44,7 +44,12 @@ namespace JobSity.ChatApp.Infrastructure.Repositories
 
             if(orderBy != null)
             {
-                return await orderBy(query).ToListAsync();
+                query = orderBy(query);
+            }
+
+            if(limit > 0)
+            {
+                return await query.Take(limit).ToListAsync();
             }
             
             return await query.ToListAsync();
