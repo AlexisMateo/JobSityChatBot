@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using JobSity.ChatApp.Infrastructure.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -34,6 +35,24 @@ namespace JobSity.ChatApp.Api
                     configuration.Authority = authority;
                     configuration.Audience = audience;
                     configuration.RequireHttpsMetadata = false;
+
+                    configuration.Events = new JwtBearerEvents
+                    {
+                        OnMessageReceived = context => {
+                            
+                            var accessToken = context.Request.Query["token"];
+
+                            var path = context.HttpContext.Request.Path;
+
+                            if(!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/chatHub"))
+                            {
+                                context.Token = accessToken;
+                            }
+
+                            return Task.CompletedTask;
+
+                        }
+                    }; 
 
                 });
 

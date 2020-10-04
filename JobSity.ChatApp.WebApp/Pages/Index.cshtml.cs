@@ -38,7 +38,7 @@ namespace JobSity.ChatApp.WebApp.Pages
 
         }
 
-        public async Task<IActionResult> OnGetTockenAsync()
+        public async Task<IActionResult> OnGetTokenAsync()
         {
             var identityInfo = _configuration.GetSection("IdentityInfo");
             var chatApiUrl = _configuration.GetSection("ChatpApiUrl").Value;
@@ -52,16 +52,8 @@ namespace JobSity.ChatApp.WebApp.Pages
             };
 
             var accessToken = await _identityManagerService.GetAccessToken(basicTokenRequest);
-
-            var httpClient = _httpClientFactory.CreateClient();
-
-            httpClient.SetBearerToken(accessToken);
-
-            var response = await httpClient.GetAsync(chatApiUrl);
-
-            var content = await response.Content.ReadAsStringAsync();
             
-            return new JsonResult(content);
+            return new JsonResult(accessToken);
         }
     }
 }
