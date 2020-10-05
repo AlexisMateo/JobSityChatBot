@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using JobSity.ChatApp.Bot.Models;
 
 namespace JobSity.ChatApp.Bot
 {
@@ -18,7 +19,12 @@ namespace JobSity.ChatApp.Bot
             Host.CreateDefaultBuilder(args)
                 .ConfigureServices((hostContext, services) =>
                 {
+                    var iConfiguration = hostContext.Configuration;
+                    
                     services.AddHostedService<Worker>();
+
+                    services.Configure<RabbitMQInfo>(iConfiguration.GetSection("RabbitMQ"));
+
                 });
     }
 }
