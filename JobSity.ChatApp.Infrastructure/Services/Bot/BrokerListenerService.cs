@@ -1,5 +1,5 @@
-using JobSity.ChatApp.Bot.Interfaces;
-using JobSity.ChatApp.Bot.Services;
+using JobSity.ChatApp.Core.Interfaces;
+using JobSity.ChatApp.Core.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -7,11 +7,11 @@ using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Configuration;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-using JobSity.ChatApp.Bot.Models;
+using JobSity.ChatApp.Core.Entities;
 using System.Text;
 using System.IO;
 
-namespace JobSity.ChatApp.Bot.Services
+namespace JobSity.ChatApp.Infrastructure.Services.Bot
 {
     public class BrokerListenerService : IBrokerListenerService
     {

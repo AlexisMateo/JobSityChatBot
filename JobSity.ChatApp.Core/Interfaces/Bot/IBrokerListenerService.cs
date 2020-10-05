@@ -1,4 +1,4 @@
-namespace JobSity.ChatApp.Bot.Interfaces
+namespace JobSity.ChatApp.Core.Interfaces.Bot
 {
     public interface IBrokerListenerService
     {

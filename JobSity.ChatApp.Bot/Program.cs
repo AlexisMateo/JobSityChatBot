@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using JobSity.ChatApp.Bot.Models;
+using JobSity.ChatApp.Core.Entities.Bot;
 
 namespace JobSity.ChatApp.Bot
 {

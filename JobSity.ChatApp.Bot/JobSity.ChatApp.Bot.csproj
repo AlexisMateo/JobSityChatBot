@@ -12,4 +12,8 @@
     <PackageReference Include="RabbitMQ.Client" Version="6.2.1" />
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\JobSity.ChatApp.Core\JobSity.ChatApp.Core.csproj" />
+  </ItemGroup>
 </Project>

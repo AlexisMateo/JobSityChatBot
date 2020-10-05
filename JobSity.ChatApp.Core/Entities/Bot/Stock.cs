@@ -1,6 +1,6 @@
 using System;
 
-namespace JobSity.ChatApp.Bot.Models
+namespace JobSity.ChatApp.Core.Entities.Bot
 {
     public class Stock
     {

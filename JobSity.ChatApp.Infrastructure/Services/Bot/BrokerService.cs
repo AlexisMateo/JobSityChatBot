@@ -1,5 +1,5 @@
-using JobSity.ChatApp.Bot.Interfaces;
-using JobSity.ChatApp.Bot.Models;
+using JobSity.ChatApp.Core.Interfaces;
+using JobSity.ChatApp.Core.Entities;
 using System.Globalization;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using CsvHelper;
 
-namespace JobSity.ChatApp.Bot.Services
+namespace JobSity.ChatApp.Infrastructure.Services.Bot
 {
     public class BrokerService : IBrokerService
     {

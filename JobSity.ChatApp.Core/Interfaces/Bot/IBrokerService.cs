@@ -1,8 +1,8 @@
 using System.Threading.Tasks;
-using JobSity.ChatApp.Bot.Models;
+using JobSity.ChatApp.Core.Entities.Bot;
 using System.Collections.Generic;
 
-namespace JobSity.ChatApp.Bot.Interfaces
+namespace JobSity.ChatApp.Core.Interfaces.Bot
 {
     public interface IBrokerService
     {
