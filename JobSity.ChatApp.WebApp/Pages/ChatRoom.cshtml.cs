@@ -11,8 +11,15 @@ namespace MyApp.Namespace
     [Authorize]
     public class ChatRoomModel : PageModel
     {
+        public string UserName { 
+            get {
+                return User.Claims.Where( c => c.Type == "name").FirstOrDefault()?.Value;
+            }
+        }
+        
         public void OnGet()
         {
+            
         }
     }
 }

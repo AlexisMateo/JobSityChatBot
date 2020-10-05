@@ -9,6 +9,9 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
 using JobSity.ChatApp.Core.Interfaces.Identity;
 using JobSity.ChatApp.Core.Entities.Identity;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication;
+using System.IdentityModel.Tokens.Jwt;
 using IdentityModel.Client;
 
 namespace JobSity.ChatApp.WebApp.Pages

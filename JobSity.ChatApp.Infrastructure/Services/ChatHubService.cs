@@ -19,9 +19,11 @@ namespace JobSity.ChatApp.Infrastructure.Services
 
         public async Task SendMessage(string user, string message)
         {
-            await Clients.All.SendAsync("ReceiveMessage", user, message);
+            var newMessage = new Message { UserName = user, MessageText = message, SentDate = DateTime.Now };
 
-            await AddMessageToStorage(user, message);
+            await Clients.All.SendAsync("ReceiveMessage", newMessage);
+
+            await AddMessageToStorage(newMessage);
            
         }
 
@@ -32,18 +34,13 @@ namespace JobSity.ChatApp.Infrastructure.Services
             await base.OnConnectedAsync();
         }
 
-        private async Task AddMessageToStorage(string user, string message)
+        private async Task AddMessageToStorage(Message message)
         {
             using (var scope = _serviceProvider.CreateScope())
             {
                 var chatRoomService = scope.ServiceProvider.GetRequiredService<IChatRoomService>();
                 
-                await chatRoomService.AddChatRoomMessage(
-                    new Message {
-                        UserName = user,
-                        MessageText = message,
-                        SentDate = DateTime.Now,
-                });
+                await chatRoomService.AddChatRoomMessage(message);
             }
         }
 
@@ -52,13 +49,14 @@ namespace JobSity.ChatApp.Infrastructure.Services
              using (var scope = _serviceProvider.CreateScope())
             {
                 var chatRoomService = scope.ServiceProvider.GetRequiredService<IChatRoomService>();
+
                 var messages = await chatRoomService.GetChatRoomMessages(50);
 
                 foreach(var message in messages)
                 {
 
                         await Clients.Client(Context.ConnectionId).SendAsync(
-                            "ReceiveMessage", message.UserName, message.MessageText
+                            "ReceiveMessage", message
                         );
 
                 }
