@@ -44,6 +44,8 @@ namespace JobSity.ChatApp.WebApp
                 
                 config.SaveTokens = true;
 
+                config.GetClaimsFromUserInfoEndpoint = true;
+
                 config.ResponseType = "code";
                 
             }) ;

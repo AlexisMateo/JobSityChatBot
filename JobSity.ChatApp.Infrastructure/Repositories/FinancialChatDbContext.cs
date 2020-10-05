@@ -5,10 +5,15 @@ namespace JobSity.ChatApp.Infrastructure.Repositories
 {
     public class FinancialChatDbContext : DbContext
     {
-        DbSet<Message> Messages { get; set; }
-        public FinancialChatDbContext(DbContextOptions<FinancialChatDbContext> options)
+        public DbSet<Message> Messages { get; set; }
+        public FinancialChatDbContext(DbContextOptions<FinancialChatDbContext> options) : base(options)
         {
-
+            
+        }
+        
+        protected override void OnConfiguring(DbContextOptionsBuilder options)
+        {
+            options.UseSqlServer("Server=localhost;Database=FinancialChatDb;User Id=sa;Password=dev123*1;");
         }
     }
 }
