@@ -17,6 +17,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using JobSity.ChatApp.Core.Entities.Bot;
+using JobSity.ChatApp.Core.Interfaces.Bot;
+using JobSity.ChatApp.Infrastructure.Services.Bot;
 
 namespace JobSity.ChatApp.Api
 {
@@ -83,6 +86,11 @@ namespace JobSity.ChatApp.Api
 
             services.AddTransient(typeof(IRepository<>), typeof(FinancialChatBaseRepository<>));
             services.AddTransient<IChatRoomService, ChatRoomService>();
+
+            services.AddTransient<IBrokerProducerService, BrokerProducerService>();
+            
+            services.Configure<RabbitMQInfo>(Configuration.GetSection("RabbitMQ"));
+            services.Configure<StockQueues>(Configuration.GetSection("StockQueues"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

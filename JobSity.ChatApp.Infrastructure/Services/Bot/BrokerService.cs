@@ -4,31 +4,43 @@ using System.Globalization;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
 using System.IO;
 using CsvHelper;
+using System.Linq;
+using System;
 
 namespace JobSity.ChatApp.Infrastructure.Services.Bot
 {
     public class BrokerService : IBrokerService
     {
         private readonly HttpClient _httpClient;
-        public BrokerService(HttpClient httpClient)
+        private readonly ILogger<BrokerService> _logger;
+
+        public BrokerService(HttpClient httpClient, ILogger<BrokerService> logger)
         {
             _httpClient = httpClient;
+            _logger = logger;
         }
 
         public async Task<IEnumerable<Stock>> GetStockQuote(string url)
         {
-            IEnumerable<Stock> stocks;
+            IEnumerable<Stock> stocks = new List<Stock>();
 
-            var response =  await _httpClient.GetStringAsync(url);
+            try{
+            
+                var response =  await _httpClient.GetStringAsync(url);
 
-            using(var textReader = new StreamReader(response))
-            {
-                var csv = new CsvReader(textReader, CultureInfo.InvariantCulture);
-                
-                stocks = csv.GetRecords<Stock>();
-                
+                using(var content = new StringReader(response))
+                {
+                    var csv = new CsvReader(content, CultureInfo.InvariantCulture);
+                    
+                    stocks = csv.GetRecords<Stock>().ToList();
+                    
+                }
+            }
+            catch (Exception ex) {
+                _logger.LogError(ex.ToString());
             }
             
             return stocks;

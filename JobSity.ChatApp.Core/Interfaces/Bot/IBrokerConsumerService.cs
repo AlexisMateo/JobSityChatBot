@@ -1,6 +1,6 @@
 namespace JobSity.ChatApp.Core.Interfaces.Bot
 {
-    public interface IBrokerListenerService
+    public interface IBrokerConsumerService
     {
          void RegisterQueueForChatBot();
     }

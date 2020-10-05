@@ -22,10 +22,12 @@ namespace JobSity.ChatApp.Core.Services
 
         public async Task<IEnumerable<Message>> GetChatRoomMessages(int quantity)
         {
-            return await _messageRepository.Get( 
+            var messages =  await _messageRepository.Get( 
                 orderBy: message => message.OrderByDescending(p => p.SentDate),
                 limit: quantity
             );
+            
+            return messages.OrderBy(p => p.SentDate);
         }
     }
 }

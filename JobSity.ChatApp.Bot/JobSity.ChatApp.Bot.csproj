@@ -13,5 +13,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\JobSity.ChatApp.Core\JobSity.ChatApp.Core.csproj" />
+    <ProjectReference Include="..\JobSity.ChatApp.Infrastructure\JobSity.ChatApp.Infrastructure.csproj" />
   </ItemGroup>
 </Project>
