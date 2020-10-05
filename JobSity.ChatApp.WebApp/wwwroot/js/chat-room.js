@@ -49,6 +49,12 @@ function connectToSignalR(apiUrl)
 
         document.getElementById("chatMessage").appendChild(li);
 
+        setTimeout(function(){ 
+            var chatBody = document.getElementById("chatbody");
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }, 100);
+       
+
     });
 
     connection.start().then(function(){
@@ -66,7 +72,19 @@ function connectToSignalR(apiUrl)
             return console.error(err.toString());
         });
 
+        document.getElementById("btn-input").value = '';
+
         event.preventDefault();
+    });
+
+    document.getElementById("btn-input").addEventListener("keyup", function(event) {
+  
+        if (event.keyCode == 13 || event.which == 13) {
+    
+            event.preventDefault();
+        
+            document.getElementById("btn-chat").click();
+        }
     });
 
 }

@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobSity.ChatApp.IdentitySer
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobSity.ChatApp.WebApp", "JobSity.ChatApp.WebApp\JobSity.ChatApp.WebApp.csproj", "{666272FE-7942-4967-ABAA-CBE64D86797F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobSity.ChatApp.Bot", "JobSity.ChatApp.Bot\JobSity.ChatApp.Bot.csproj", "{0C1FDEF6-A4B4-4FFB-ADC9-646320A53B11}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -86,5 +88,17 @@ Global
 		{666272FE-7942-4967-ABAA-CBE64D86797F}.Release|x64.Build.0 = Release|Any CPU
 		{666272FE-7942-4967-ABAA-CBE64D86797F}.Release|x86.ActiveCfg = Release|Any CPU
 		{666272FE-7942-4967-ABAA-CBE64D86797F}.Release|x86.Build.0 = Release|Any CPU
+		{0C1FDEF6-A4B4-4FFB-ADC9-646320A53B11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C1FDEF6-A4B4-4FFB-ADC9-646320A53B11}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C1FDEF6-A4B4-4FFB-ADC9-646320A53B11}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{0C1FDEF6-A4B4-4FFB-ADC9-646320A53B11}.Debug|x64.Build.0 = Debug|Any CPU
+		{0C1FDEF6-A4B4-4FFB-ADC9-646320A53B11}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0C1FDEF6-A4B4-4FFB-ADC9-646320A53B11}.Debug|x86.Build.0 = Debug|Any CPU
+		{0C1FDEF6-A4B4-4FFB-ADC9-646320A53B11}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C1FDEF6-A4B4-4FFB-ADC9-646320A53B11}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C1FDEF6-A4B4-4FFB-ADC9-646320A53B11}.Release|x64.ActiveCfg = Release|Any CPU
+		{0C1FDEF6-A4B4-4FFB-ADC9-646320A53B11}.Release|x64.Build.0 = Release|Any CPU
+		{0C1FDEF6-A4B4-4FFB-ADC9-646320A53B11}.Release|x86.ActiveCfg = Release|Any CPU
+		{0C1FDEF6-A4B4-4FFB-ADC9-646320A53B11}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
