@@ -19,8 +19,14 @@ namespace JobSity.ChatApp.Bot.Services
 
         private IModel _channel;
         private readonly RabbitMQInfo _rabbitInfo;
+        private readonly IConfiguration configuration1;
+        private readonly _brokerService;
 
-        public BrokerConsumerService(ILogger<BrokerConsumerService> logger, IOptions<RabbitMQInfo> rabbitInfo)
+        public BrokerConsumerService(
+            ILogger<BrokerConsumerService> logger, 
+            IOptions<RabbitMQInfo> rabbitInfo,
+            IConfiguration configuration,
+            IBrokerService brokerService)
         {
             _rabbitInfo = rabbitInfo.Value;
 
@@ -32,6 +38,9 @@ namespace JobSity.ChatApp.Bot.Services
             };
 
             _connection = _connectionFactory.CreateConnection();
+
+            _configuration = configuration;
+            _brokerService = brokerService;
 
         }
         public void RegisterQueueForChatBot()
@@ -56,7 +65,7 @@ namespace JobSity.ChatApp.Bot.Services
                 
                 if(!string.IsNullOrWhiteSpace(message))
                 {
-                    
+                    _brockerService.GetStockQuote();
                 }
 
                 if(_channel.IsOpen)

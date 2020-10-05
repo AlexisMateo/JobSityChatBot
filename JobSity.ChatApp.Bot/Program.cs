@@ -20,8 +20,9 @@ namespace JobSity.ChatApp.Bot
                 .ConfigureServices((hostContext, services) =>
                 {
                     var iConfiguration = hostContext.Configuration;
-                    
+
                     services.AddHostedService<Worker>();
+                    services.AddHttpClient();
 
                     services.Configure<RabbitMQInfo>(iConfiguration.GetSection("RabbitMQ"));
 
