@@ -1,5 +1,5 @@
-using JobSity.ChatApp.Core.Interfaces;
-using JobSity.ChatApp.Core.Entities;
+using JobSity.ChatApp.Core.Interfaces.Bot;
+using JobSity.ChatApp.Core.Entities.Bot;
 using System.Globalization;
 using System.Net.Http;
 using System.Threading.Tasks;

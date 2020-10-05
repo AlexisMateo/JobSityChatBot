@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using JobSity.ChatApp.Core.Interfaces.Bot;
 using JobSity.ChatApp.Core.Entities.Bot;
 using RabbitMQ.Client;
@@ -12,14 +13,23 @@ namespace JobSity.ChatApp.Infrastructure.Services.Bot
     {
          private readonly ConnectionFactory _connectionFactory;
         private readonly ILogger<BrokerProducerService> _logger;
+        private readonly RabbitMQInfo _rabbitInfo;
+
 
         public BrokerProducerService(
             ILogger<BrokerProducerService> logger,
-            IOptions<RabbitMQInfo> rabbitInfo,
+            IOptions<RabbitMQInfo> rabbitInfo
         )
         {
             _logger = logger;
-            _connectionFactory = 
+            _rabbitInfo = rabbitInfo.Value;
+
+            _connectionFactory = new ConnectionFactory
+            {
+                HostName = _rabbitInfo.HostName,
+                UserName = _rabbitInfo.UserName,
+                Password = _rabbitInfo.Password
+            };
         }
         
         public void SendMessage(string queueName, string stockCode)

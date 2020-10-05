@@ -1,13 +1,12 @@
-using JobSity.ChatApp.Core.Interfaces;
+using JobSity.ChatApp.Core.Interfaces.Bot;
 using JobSity.ChatApp.Core.Services;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Configuration;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-using JobSity.ChatApp.Core.Entities;
+using JobSity.ChatApp.Core.Entities.Bot;
 using System.Text;
 using System.IO;
 
