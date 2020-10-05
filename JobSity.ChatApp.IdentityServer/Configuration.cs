@@ -43,7 +43,8 @@ namespace JobSity.ChatApp.IdentityServer
                     , IdentityServerConstants.StandardScopes.OpenId
                     , IdentityServerConstants.StandardScopes.Profile                    
                      },
-                    RequireConsent = false
+                    RequireConsent = false,
+                    AlwaysIncludeUserClaimsInIdToken = true
                 }
             };
         }

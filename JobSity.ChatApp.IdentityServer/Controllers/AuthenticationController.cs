@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
 using JobSity.ChatApp.IdentityServer.ViewModels;
+using System.Security.Claims;
 
 namespace JobSity.ChatApp.IdentityServer.Controllers
 {
@@ -60,12 +61,10 @@ namespace JobSity.ChatApp.IdentityServer.Controllers
                 return View(registerViewModel);
             }
 
-            var user = new IdentityUser
-            {
-                UserName = registerViewModel.UserName
-            };
+            var user = new IdentityUser(registerViewModel.UserName);
 
             var result = await _userManager.CreateAsync(user, registerViewModel.Password);
+            await _userManager.AddClaimAsync(user, new Claim("userName",user.UserName));
 
             if(result.Succeeded)
             {
