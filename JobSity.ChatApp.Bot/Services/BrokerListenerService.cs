@@ -1,8 +1,10 @@
 using JobSity.ChatApp.Bot.Interfaces;
+using JobSity.ChatApp.Bot.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Configuration;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using JobSity.ChatApp.Bot.Models;
@@ -11,7 +13,7 @@ using System.IO;
 
 namespace JobSity.ChatApp.Bot.Services
 {
-    public class BrokerConsumerService : IBrokerConsumerService
+    public class BrokerListenerService : IBrokerListenerService
     {
         private readonly ConnectionFactory _connectionFactory;
 
@@ -19,11 +21,11 @@ namespace JobSity.ChatApp.Bot.Services
 
         private IModel _channel;
         private readonly RabbitMQInfo _rabbitInfo;
-        private readonly IConfiguration configuration1;
-        private readonly _brokerService;
+        private readonly IConfiguration _configuration;
+        private readonly IBrokerService _brokerService;
 
-        public BrokerConsumerService(
-            ILogger<BrokerConsumerService> logger, 
+        public BrokerListenerService(
+            ILogger<BrokerListenerService> logger, 
             IOptions<RabbitMQInfo> rabbitInfo,
             IConfiguration configuration,
             IBrokerService brokerService)
@@ -65,7 +67,7 @@ namespace JobSity.ChatApp.Bot.Services
                 
                 if(!string.IsNullOrWhiteSpace(message))
                 {
-                    _brockerService.GetStockQuote();
+                    _brokerService.GetStockQuote(message);
                 }
 
                 if(_channel.IsOpen)
