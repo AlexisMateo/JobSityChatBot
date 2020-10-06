@@ -16,6 +16,7 @@ using IdentityModel.Client;
 
 namespace JobSity.ChatApp.WebApp.Pages
 {
+     [Authorize]
     public class IndexModel : PageModel
     {
         private readonly ILogger<IndexModel> _logger;
