@@ -21,7 +21,7 @@ namespace JobSity.ChatApp.Infrastructure.Services
          private IBrokerProducerService _brokerProducerService;
          private readonly RabbitMQInfo _rabbitInfo;
          private readonly StockQueues _stockQueues;
-         private const string botUser = "bot";
+         private const string BOT_USER_NAME = "bot";
 
         public ChatHubService(IServiceProvider serviceProvider,
             IBrokerProducerService brokerProducerService,
@@ -35,7 +35,7 @@ namespace JobSity.ChatApp.Infrastructure.Services
             _stockQueues = stockQueues.Value;
 
             _brokerProducerService.QueueCallBack += async (o, e) => {
-                    await SendMessage(botUser, e.StockInfo);
+                    await SendMessage(BOT_USER_NAME, e.StockInfo);
                 };
         }
 
@@ -49,7 +49,7 @@ namespace JobSity.ChatApp.Infrastructure.Services
             {
                 await Clients.All.SendAsync("ReceiveMessage", newMessage);
                 
-                if(user != botUser)
+                if(user != BOT_USER_NAME)
                 {
                     await AddMessageToStorage(newMessage);
                 }
