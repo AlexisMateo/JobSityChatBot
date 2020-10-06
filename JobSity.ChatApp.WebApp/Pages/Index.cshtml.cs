@@ -39,7 +39,7 @@ namespace JobSity.ChatApp.WebApp.Pages
 
         public void OnGet()
         {
-
+            throw new Exception("webapp test exception");
         }
 
         public async Task<IActionResult> OnGetRetrieveChatApiUrlAsync()

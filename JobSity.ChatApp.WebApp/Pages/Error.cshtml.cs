@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
@@ -26,6 +28,11 @@ namespace JobSity.ChatApp.WebApp.Pages
         public void OnGet()
         {
             RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
+
+            var exception = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
+            
+            _logger.LogError(exception.Error.Message);
+
         }
     }
 }

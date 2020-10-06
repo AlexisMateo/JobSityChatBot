@@ -21,6 +21,8 @@ using JobSity.ChatApp.Core.Entities.Bot;
 using JobSity.ChatApp.Core.Interfaces.Bot;
 using JobSity.ChatApp.Infrastructure.Services.Bot;
 using Microsoft.AspNetCore.Http;
+using JobSity.ChatApp.Api.Middleware;
+using JobSity.ChatApp.Api.Extensions;
 
 namespace JobSity.ChatApp.Api
 {
@@ -38,6 +40,11 @@ namespace JobSity.ChatApp.Api
         {
             var authority = Configuration.GetSection("IdentityInfo:Authority").Value;
             var audience = Configuration.GetSection("IdentityInfo:Audience").Value;
+
+             services.AddLogging(loggingBuilder =>
+                    {
+                        loggingBuilder.AddSeq(Configuration.GetSection("Seq"));
+                    });
 
             services.AddAuthentication("Bearer")
                 .AddJwtBearer("Bearer", configuration => {
@@ -97,10 +104,12 @@ namespace JobSity.ChatApp.Api
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
+            /*if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-            }
+            }*/
+
+            app.UseGlobalExceptionHandler();
 
             app.UseHttpsRedirection();
 
@@ -112,8 +121,10 @@ namespace JobSity.ChatApp.Api
                 options => options.SetIsOriginAllowed(x => _ = true).AllowAnyMethod().AllowAnyHeader().AllowCredentials()
             );
 
+            
+
             app.UseAuthentication();
-            app.UseAuthorization();
+            
 
             app.UseEndpoints(endpoints =>
             {

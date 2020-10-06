@@ -1,7 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -11,21 +8,17 @@ using Microsoft.Extensions.Hosting;
 using JobSity.ChatApp.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Diagnostics;
-using System.Net;
-using System.Text;
 using Microsoft.Extensions.Logging;
+using JobSity.ChatApp.IdentityServer.Extensions;
 
 namespace JobSity.ChatApp.IdentityServer
 {
     public class Startup
     {
         IConfiguration _configuration;
-        ILogger<Startup> _logger;
-        public Startup(IConfiguration configuration, ILogger<Startup> logger)
+        public Startup(IConfiguration configuration)
         {
             _configuration = configuration;
-            _logger = logger;
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -79,27 +72,7 @@ namespace JobSity.ChatApp.IdentityServer
                 app.UseDeveloperExceptionPage();
             }*/
 
-            app.UseExceptionHandler(new ExceptionHandlerOptions{
-                ExceptionHandler = (c) => {
-
-                    var exception = c.Features.Get<IExceptionHandlerFeature>();
-
-                    _logger.LogError(exception.Error.Message);
-
-                    var statusCode = exception.Error.GetType().Name switch {
-                        "ArgumentException" => HttpStatusCode.BadRequest,
-                        _ => HttpStatusCode.ServiceUnavailable 
-                    };
-
-                    c.Response.StatusCode = (int)statusCode;
-
-                    var content = Encoding.UTF8.GetBytes(exception.Error.Message);
-                    
-                    c.Response.Body.WriteAsync(content, 0, content.Length);
-
-                    return Task.CompletedTask;
-                }
-            });
+            app.UseGlobalExceptionHandler();
             
             app.UseStaticFiles();
             app.UseRouting();

@@ -27,7 +27,15 @@ namespace JobSity.ChatApp.Bot
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            _brokerConsumerService.RegisterQueueForChatBot();
+            try
+            {
+                _brokerConsumerService.RegisterQueueForChatBot();
+            }
+            catch (Exception ex )
+            {
+                _logger.LogError(ex.ToString());
+            }
+
             
             while (!stoppingToken.IsCancellationRequested)
             {

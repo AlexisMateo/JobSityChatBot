@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using JobSity.ChatApp.Core.Interfaces.Identity;
 using JobSity.ChatApp.Infrastructure.Services;
+using Microsoft.Extensions.Logging;
 
 namespace JobSity.ChatApp.WebApp
 {
@@ -26,6 +27,12 @@ namespace JobSity.ChatApp.WebApp
         public void ConfigureServices(IServiceCollection services)
         {
             var chatWebIdentityInfo = Configuration.GetSection("ChatWebIdentityInfo");
+
+             services.AddLogging(loggingBuilder =>
+                    {
+                        loggingBuilder.AddSeq(Configuration.GetSection("Seq"));
+                    });
+
 
             services.AddAuthentication(config =>{
                 config.DefaultScheme = "Cookies";
@@ -59,16 +66,16 @@ namespace JobSity.ChatApp.WebApp
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
+            // if (env.IsDevelopment())
+            // {
+            //     app.UseDeveloperExceptionPage();
+            // }
+            // else
+            // {
                 app.UseExceptionHandler("/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
-            }
+            // }
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

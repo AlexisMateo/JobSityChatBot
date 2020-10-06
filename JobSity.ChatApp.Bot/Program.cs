@@ -15,9 +15,7 @@ namespace JobSity.ChatApp.Bot
     {
         public static void Main(string[] args)
         {
-            System.AppDomain.CurrentDomain.UnhandledException += GlobalExceptionHandler;
-            
-            CreateHostBuilder(args).Build().Run();
+            CreateHostBuilder(args).Build().Run();  
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
@@ -25,6 +23,12 @@ namespace JobSity.ChatApp.Bot
                 .ConfigureServices((hostContext, services) =>
                 {
                     var iConfiguration = hostContext.Configuration;
+
+                    services.AddLogging(loggingBuilder =>
+                    {
+                        loggingBuilder.AddSeq(iConfiguration.GetSection("Seq"));
+                    });
+
 
                     services.AddHostedService<Worker>();
                     services.AddHttpClient<IBrokerService,BrokerService>();
@@ -36,14 +40,6 @@ namespace JobSity.ChatApp.Bot
                     services.Configure<StockQueues>(iConfiguration.GetSection("StockQueues"));
 
                 });
-        private static void GlobalExceptionHandler(object sender, UnhandledExceptionEventArgs e) {
-             
-             using var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
-             
-             var logger = loggerFactory.CreateLogger<Program>();
-
-            logger.LogError($"APPID : Bot, Error : { e.ToString()}");
-        }
     }
 
    

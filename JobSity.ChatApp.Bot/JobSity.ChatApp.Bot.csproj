@@ -9,6 +9,7 @@
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.2" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="3.1.2" />
     <PackageReference Include="RabbitMQ.Client" Version="6.2.1" />
+    <PackageReference Include="Seq.Extensions.Logging" Version="5.0.0-dev-00067" />
   </ItemGroup>
 
   <ItemGroup>
