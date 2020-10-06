@@ -14,15 +14,18 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Diagnostics;
 using System.Net;
 using System.Text;
+using Microsoft.Extensions.Logging;
 
 namespace JobSity.ChatApp.IdentityServer
 {
     public class Startup
     {
         IConfiguration _configuration;
-        public Startup(IConfiguration configuration)
+        ILogger<Startup> _logger;
+        public Startup(IConfiguration configuration, ILogger<Startup> logger)
         {
             _configuration = configuration;
+            _logger = logger;
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -30,6 +33,11 @@ namespace JobSity.ChatApp.IdentityServer
         public void ConfigureServices(IServiceCollection services)
         {
             var identityDbConnectionString = _configuration.GetSection("ConnectionStrings:IdentityDb").Value;
+
+            services.AddLogging(loggingBuilder =>
+                    {
+                        loggingBuilder.AddSeq(_configuration.GetSection("Seq"));
+                    });
 
             services.AddDbContext<IdentityChatDbContext>(options => {
                 options.UseSqlServer(identityDbConnectionString);
@@ -75,6 +83,8 @@ namespace JobSity.ChatApp.IdentityServer
                 ExceptionHandler = (c) => {
 
                     var exception = c.Features.Get<IExceptionHandlerFeature>();
+
+                    _logger.LogError(exception.Error.Message);
 
                     var statusCode = exception.Error.GetType().Name switch {
                         "ArgumentException" => HttpStatusCode.BadRequest,
