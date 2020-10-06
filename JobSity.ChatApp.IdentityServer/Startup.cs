@@ -67,7 +67,8 @@ namespace JobSity.ChatApp.IdentityServer
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            
+            app.UseStaticFiles();
             app.UseRouting();
 
             //app.UseAuthentication();
@@ -82,7 +83,7 @@ namespace JobSity.ChatApp.IdentityServer
 
                 endpoints.MapGet("/", async context =>
                 {
-                    await context.Response.WriteAsync("Hello World!");
+                    await context.Response.WriteAsync("Identity Server");
                 });
             });
         }
