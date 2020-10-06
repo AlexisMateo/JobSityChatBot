@@ -121,9 +121,8 @@ namespace JobSity.ChatApp.Api
                 options => options.SetIsOriginAllowed(x => _ = true).AllowAnyMethod().AllowAnyHeader().AllowCredentials()
             );
 
-            
-
             app.UseAuthentication();
+            app.UseAuthorization();
             
 
             app.UseEndpoints(endpoints =>
