@@ -44,7 +44,7 @@ namespace JobSity.ChatApp.IdentityServer.Controllers
                 }
             }
 
-            return View();
+            return View(loginViewModel);
         }
 
         [HttpGet]

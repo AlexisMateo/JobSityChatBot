@@ -11,6 +11,9 @@ using Microsoft.Extensions.Hosting;
 using JobSity.ChatApp.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Diagnostics;
+using System.Net;
+using System.Text;
 
 namespace JobSity.ChatApp.IdentityServer
 {
@@ -63,17 +66,33 @@ namespace JobSity.ChatApp.IdentityServer
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
+            /*if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-            }
+            }*/
+
+            app.UseExceptionHandler(new ExceptionHandlerOptions{
+                ExceptionHandler = (c) => {
+
+                    var exception = c.Features.Get<IExceptionHandlerFeature>();
+
+                    var statusCode = exception.Error.GetType().Name switch {
+                        "ArgumentException" => HttpStatusCode.BadRequest,
+                        _ => HttpStatusCode.ServiceUnavailable 
+                    };
+
+                    c.Response.StatusCode = (int)statusCode;
+
+                    var content = Encoding.UTF8.GetBytes(exception.Error.Message);
+                    
+                    c.Response.Body.WriteAsync(content, 0, content.Length);
+
+                    return Task.CompletedTask;
+                }
+            });
             
             app.UseStaticFiles();
             app.UseRouting();
-
-            //app.UseAuthentication();
-
-            //app.UseAuthorization();
 
             app.UseIdentityServer();
 
