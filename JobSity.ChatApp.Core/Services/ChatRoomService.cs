@@ -15,9 +15,9 @@ namespace JobSity.ChatApp.Core.Services
         {
             _messageRepository = messageRepository;
         }
-        public async Task AddChatRoomMessage(Message message)
+        public async Task<Message> AddChatRoomMessage(Message message)
         {
-            await _messageRepository.Insert(message);
+            return await _messageRepository.Insert(message);
         }
 
         public async Task<IEnumerable<Message>> GetChatRoomMessages(int quantity)

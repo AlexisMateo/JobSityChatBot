@@ -55,10 +55,12 @@ namespace JobSity.ChatApp.Infrastructure.Repositories
             return await query.ToListAsync();
         }
 
-        public async Task Insert(T entity)
+        public async Task<T> Insert(T entity)
         {
             await _dbSet.AddAsync(entity);
             await _dbContext.SaveChangesAsync();
+
+            return entity;
         }
 
         public async Task Update(T entity)

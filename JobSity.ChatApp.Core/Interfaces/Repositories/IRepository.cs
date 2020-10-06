@@ -16,7 +16,7 @@ namespace JobSity.ChatApp.Core.Interfaces.Repositories
              string includeProperties = "",
              int limit = 0
          );
-         Task Insert(T entity);
+         Task<T> Insert(T entity);
          Task Update(T entity);
          Task Delete(object id);
          void Delete(T entity);
