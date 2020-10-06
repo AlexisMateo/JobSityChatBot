@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using JobSity.ChatApp.Core.Entities.Bot;
 using JobSity.ChatApp.Core.Interfaces.Bot;
 using JobSity.ChatApp.Infrastructure.Services.Bot;
+using Microsoft.Extensions.Logging;
 
 namespace JobSity.ChatApp.Bot
 {
@@ -14,6 +15,8 @@ namespace JobSity.ChatApp.Bot
     {
         public static void Main(string[] args)
         {
+            System.AppDomain.CurrentDomain.UnhandledException += GlobalExceptionHandler;
+            
             CreateHostBuilder(args).Build().Run();
         }
 
@@ -32,7 +35,16 @@ namespace JobSity.ChatApp.Bot
                     
                     services.Configure<StockQueues>(iConfiguration.GetSection("StockQueues"));
 
-
                 });
+        private static void GlobalExceptionHandler(object sender, UnhandledExceptionEventArgs e) {
+             
+             using var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
+             
+             var logger = loggerFactory.CreateLogger<Program>();
+
+            logger.LogError($"APPID : Bot, Error : { e.ToString()}");
+        }
     }
+
+   
 }

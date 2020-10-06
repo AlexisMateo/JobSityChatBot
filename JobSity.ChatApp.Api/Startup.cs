@@ -20,6 +20,7 @@ using Microsoft.Extensions.Logging;
 using JobSity.ChatApp.Core.Entities.Bot;
 using JobSity.ChatApp.Core.Interfaces.Bot;
 using JobSity.ChatApp.Infrastructure.Services.Bot;
+using Microsoft.AspNetCore.Http;
 
 namespace JobSity.ChatApp.Api
 {
@@ -117,6 +118,12 @@ namespace JobSity.ChatApp.Api
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                
+                endpoints.MapGet("/", async context =>
+                {
+                    await context.Response.WriteAsync("Web API - ChatHub");
+                });
+
                 endpoints.MapHub<ChatHubService>("/chatHub");
             });
         }
