@@ -6,7 +6,7 @@ namespace JobSity.ChatApp.Core.Interfaces.Chat
 {
     public interface IChatRoomService
     {
-         Task AddChatRoomMessage(Message message);
+         Task<Message> AddChatRoomMessage(Message message);
          Task<IEnumerable<Message>> GetChatRoomMessages(int lastedQuantity);
     }
 }
