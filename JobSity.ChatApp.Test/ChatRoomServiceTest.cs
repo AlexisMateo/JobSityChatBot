@@ -1,4 +1,3 @@
-using System;
 using Moq;
 using Xunit;
 using JobSity.ChatApp.Core.Interfaces.Chat;
@@ -8,7 +7,6 @@ using System.Threading.Tasks;
 using JobSity.ChatApp.Core.Services;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 
 namespace JobSity.ChatApp.Test
 {
@@ -17,19 +15,22 @@ namespace JobSity.ChatApp.Test
         [Theory]
         [InlineData("dev1", "message")]
         [InlineData("dev2", "message")]
-        public async Task AddChatRoomMessage_Should_ReturnCreatedMessage_When_Called(string userName, string Message)
+        public async Task AddChatRoomMessage_Should_ReturnCreatedMessage_When_Called(string userName, string message)
         {
-            var message = new Message { UserName = userName, MessageText = Message };
+            var testMessage = new Message { UserName = userName, MessageText = message };
 
             var iRepository = new Mock<IRepository<Message>>();
-            iRepository.Setup(x => x.Insert(It.IsAny<Message>())).ReturnsAsync(message);
+            iRepository
+                .Setup(x => x.Insert(It.IsAny<Message>()))
+                .ReturnsAsync(testMessage);
             
             var iService = new ChatRoomService(iRepository.Object);
-            var exprectedMessage = await iService.AddChatRoomMessage(message);
+            var exprectedMessage = await iService.AddChatRoomMessage(testMessage);
 
-            Assert.Equal(message, exprectedMessage);
+            Assert.Equal(testMessage, exprectedMessage);
         }
 
+        //TODO Due to Moq lack of the ability to mock method with lambda expression, we need to test this method with a fakedbcontext. 
         [Theory]
         [InlineData(6)]
         [InlineData(3)]
@@ -46,9 +47,9 @@ namespace JobSity.ChatApp.Test
 
             var iService = new Mock<IChatRoomService>();
 
-            //TODO Due to Moq lack of the ability to mock method with lambda expression. we tested this method directily with the service. 
-
-            iService.Setup(x => x.GetChatRoomMessages(It.IsAny<int>())).ReturnsAsync(messages.Take(quantity));
+            iService
+                .Setup(x => x.GetChatRoomMessages(It.IsAny<int>()))
+                .ReturnsAsync(messages.Take(quantity));
             
             var receivedMessages = await iService.Object.GetChatRoomMessages(quantity);
             var quantityReceived = receivedMessages.Count();
