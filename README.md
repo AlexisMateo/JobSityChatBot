@@ -8,7 +8,7 @@ This project alow people to chat after via web browser using tecnologies like Si
 
 ### JobSity.ChatApp.IdentityServer
 
-MVC project that grant users and applicatios to comunicate eachother. Also, is responsible for registering and login users.
+MVC project that grant users and applicatios to comunicate each other. Also, is responsible for registering and login users.
 
 ### JobSity.ChatApp.Api
 
